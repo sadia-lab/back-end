@@ -1,10 +1,7 @@
-// ===== FULL FRONTEND (app.js) =====
-
 let lastHighlighted = null;
 
 // Highlight selected text
-const highlightBtn = document.getElementById("highlight-btn");
-highlightBtn.addEventListener("click", () => {
+document.getElementById("highlight-btn").addEventListener("click", () => {
     const selection = window.getSelection();
     if (selection.rangeCount > 0 && selection.toString().trim() !== '') {
         const range = selection.getRangeAt(0);
@@ -31,8 +28,7 @@ document.getElementById("link-btn").addEventListener("click", () => {
 });
 
 // Insert Link
-const insertLink = document.getElementById("insert-link");
-insertLink.addEventListener("click", () => {
+document.getElementById("insert-link").addEventListener("click", () => {
     const url = document.getElementById("link-url").value;
     if (url && activeHighlight) {
         const link = document.createElement('a');
@@ -47,13 +43,14 @@ insertLink.addEventListener("click", () => {
     activeHighlight = null;
 });
 
+// Cancel Link Input
 document.getElementById("cancel-link").addEventListener("click", () => {
     document.getElementById("link-input").style.display = "none";
     document.getElementById("link-url").value = '';
     activeHighlight = null;
 });
 
-// Save Button functionality
+// Save POI
 document.getElementById("save-btn").addEventListener("click", () => {
     const poiDescription = document.getElementById("poi-description-area").innerText.trim();
 
@@ -70,7 +67,7 @@ document.getElementById("save-btn").addEventListener("click", () => {
         });
     });
 
-    fetch('http://localhost:3000/save-poi', {
+    fetch('https://back-end-cu4m.onrender.com/save-poi', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -87,21 +84,16 @@ document.getElementById("save-btn").addEventListener("click", () => {
     .catch(error => console.error('Error:', error));
 });
 
-// Fetch all saved POIs
-// === FULL FETCH BUTTON ===
-
-
+// Fetch All Saved POIs
 document.getElementById("fetch-btn").addEventListener("click", function() {
-    fetch('http://localhost:3000/get-pois')
+    fetch('https://back-end-cu4m.onrender.com/get-pois')
         .then(res => {
-            if (!res.ok) {
-                throw new Error("Fetch failed");
-            }
+            if (!res.ok) throw new Error("Fetch failed");
             return res.json();
         })
         .then(data => {
             const resultArea = document.getElementById("output-area");
-            resultArea.innerHTML = ''; // Clear the error message
+            resultArea.innerHTML = '';
 
             if (!data.length) {
                 resultArea.innerHTML = '<p>No POIs found.</p>';
